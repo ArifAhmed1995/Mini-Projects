@@ -3,22 +3,26 @@
 //it can be extended further by tweaking the value
 //of the coefficient of restitution.
 
+
 //Date :: 5/10/2015
 //Author :: ARIF AHMED
+
+package edu.princeton.cs.algs4;
+
 class Simulation
 {
   int show_time = 2;
   class Particle
    {
      //All the parameters of the particle such as radius,mass,velocity,etc.
-     double x,y, v_x , v_y; 
+     double x,y, v_x , v_y;
      double radius,mass,size,cosine,sine;
      int side,k;//'k' denotes the mass multiplier, 'side' denotes whichever side the particle is present.
      public Particle(int k)
      {
          //Initial dimensions of every particle.
          //A random direction is given to every particle,
-         //but same speed.The starting coordinates of every particle 
+         //but same speed.The starting coordinates of every particle
          //are completely random.
          this.x = StdRandom.uniform() * 0.46;
          this.y = StdRandom.uniform();
@@ -27,11 +31,11 @@ class Simulation
          this.v_x = 0.007*this.cosine;
          this.v_y = 0.007*this.sine;
          this.radius = 0.005 * k;
-        
+
          this.mass = Math.pow(this.radius,2)*10000;
          //'this.size' is the size of the gap in the wall.
          this.size = 0.4;
-     
+
          this.k = k;
          if(x <= 0.5)//Check if particle is present on the left or the right side.
              this.side = 0;
@@ -55,7 +59,7 @@ class Simulation
            StdDraw.setPenColor(0,255,0);
          this.x += this.v_x;//Update position.
          this.y += this.v_y;
-         
+
          if(( this.y > (0.5-this.size+this.radius) )&& (this.y < (0.5-this.radius)))//This is where particles cross.
          {
              if((this.x+this.radius) > 0.501 && this.side == 0)//This is the gap.
@@ -115,8 +119,8 @@ class Simulation
 
        for(int i = 0;i < N;i++) //Create an array of particles with random velocities and positions.
           A[i] = new Particle(1);
-       
-       int left = 0;//Counts hwo many particles 
+
+       int left = 0;//Counts hwo many particles
        int right = 0;//are on the left and right sides respectively.
        int pressed = 0;//Signals if a key has been pressed.Signal for beginning the simulation.
            while(pressed == 0)
@@ -134,16 +138,16 @@ class Simulation
                     else
                       right++;
                  }
-           
+
                   StdDraw.setPenColor(0,0,0);
                   StdDraw.text(0.05,0.95,String.valueOf(left));//Displays number of particles on the left and right sides.
-                  StdDraw.text(0.8,0.95,String.valueOf(right));    
+                  StdDraw.text(0.8,0.95,String.valueOf(right));
                   StdDraw.setPenColor(255,0,0);
                   for(int i = 0;i < N;i++)
                       A[i].draw();
-                  
+
                   //This block of code draws the wall.
-                  
+
                   StdDraw.setPenColor(70,12,123);
                   StdDraw.line(0.5,0,0.5,0.5 - size);
                   StdDraw.line(0.501,0,0.501,0.5 - size);
@@ -155,10 +159,10 @@ class Simulation
                   StdDraw.line(0.503,0.5,0.503,1);
                   StdDraw.text(0.5,0.5,"Press any key to start simulation.");
                   StdDraw.show(10);
-           }   
+           }
            while(true)
               {
-               
+
                  StdDraw.clear();
                  StdDraw.setPenColor(70,12,123);
                  StdDraw.line(0.5,0,0.5,0.5 - size);
@@ -171,7 +175,7 @@ class Simulation
                  StdDraw.line(0.503,0.5,0.503,1);
                  left = 0;
                  right = 0;
-           
+
                  for(int i = 0;i < N;i++)
                  {
                     if(A[i].side == 0)
@@ -179,14 +183,14 @@ class Simulation
                     else
                       right++;
                  }
-           
+
                   StdDraw.setPenColor(0,0,0);
                   StdDraw.text(0.02,0.9,String.valueOf(left));
-                  StdDraw.text(0.8,0.9,String.valueOf(right));    
+                  StdDraw.text(0.8,0.9,String.valueOf(right));
                   StdDraw.setPenColor(255,0,0);
-                             
+
                   for(int i = 0;i < N;i++)
-                   {         
+                   {
                      //Check collisions with other particles.
                       for(int j = 0;j < N;j++)
                         {
@@ -196,7 +200,7 @@ class Simulation
                                  double u_j_x = A[j].v_x;
                                  double u_i_y = A[i].v_y;
                                  double u_j_y = A[j].v_y;
-                        
+
                                  if( (u_i_x == u_j_x) && (u_i_y == u_j_y) )
                                     {
                                       while(dist(A[i],A[j]) <= (A[i].radius + A[j].radius))
@@ -210,7 +214,7 @@ class Simulation
                                   //Final velocities are judged according to the laws of collisions.
                                   A[i].v_x = (A[i].mass*u_i_x + A[j].mass*u_j_x + A[j].mass*e*(u_j_x - u_i_x))/(A[i].mass + A[j].mass);
                                   A[j].v_x = (A[i].mass*u_i_x*(1 + e) + u_j_x*(A[j].mass - A[i].mass*e))/(A[i].mass + A[j].mass);
-                        
+
                                   A[i].v_y = (A[i].mass*u_i_y + A[j].mass*u_j_y + A[j].mass*e*(u_j_y - u_i_y))/(A[i].mass + A[j].mass);
                                   A[j].v_y = (A[i].mass*u_i_y*(1 + e) + u_j_y*(A[j].mass - A[i].mass*e))/(A[i].mass + A[j].mass);
                                 }
@@ -221,7 +225,7 @@ class Simulation
            StdDraw.show(show_time);//Show for certain time.
        }
     }
-  
+
     public double dist(Particle A,Particle B)//Helper function to compute the distance between any two particles.
     {
         return (double)Math.sqrt( (A.x - B.x)*(A.x - B.x) + (A.y - B.y)*(A.y - B.y) );
